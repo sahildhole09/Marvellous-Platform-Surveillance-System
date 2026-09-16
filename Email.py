@@ -30,8 +30,6 @@ def SendMail(FileName, ReceiverMail):
 
         smtp = smtplib.SMTP_SSL("smtp.gmail.com", 465)
 
-        #smtp.starttls()
-
         smtp.login(SenderMail, AppPassword)
 
         smtp.send_message(msg)
