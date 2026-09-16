@@ -5,8 +5,9 @@ import time
 import schedule
 
 from ProcessScan import ProcessScan
+from Email import SendMail
 
-def PlatformSurveillance(FolderName):
+def PlatformSurveillance(FolderName,EmailID):
     Border = "-"*50
 
     Ret = False
@@ -31,7 +32,7 @@ def PlatformSurveillance(FolderName):
     print(f"Log file gets successfully created with name\n {FileName}\n")
 
     fobj.write(Border+"\n")
-    fobj.write("----Marvellous Platform Surveillance System----\n")
+    fobj.write("---- Marvellous Platform Surveillance System ----\n")
     fobj.write("Log file gets created at "+timestamp+"\n")
     fobj.write(Border+"\n\n")
 
@@ -99,6 +100,8 @@ def PlatformSurveillance(FolderName):
     
     fobj.close()
 
+    SendMail(FileName, EmailID)
+
 def main():
     Border = "-"*50
     print(Border)
@@ -115,10 +118,11 @@ def main():
             print("5 : It fetch the information of running processes")
             print("6 : It gets auto scheduled periodically")
             print("7 : It maintain all records into log file")
+            print("8 : It sends Log File through Email")
 
         elif(sys.argv[1] == "--u" or sys.argv[1] == "--U"):
             print("Use the automation script as : ")
-            print(f"python {sys.argv[0]} Time_Interval Folder_Name")
+            print(f"python {sys.argv[0]} Time_Interval Folder_Name Receiver_Email")
             print("Time_Interval : Time in minutes for periodic execution")
             print("Folder_Name : Name of Folder for log file creation")
             
@@ -126,12 +130,12 @@ def main():
             print("Unable to proceed as arguments are not matching")
             print("Please use --h or --u flag for getting more details")
 
-    elif(len(sys.argv) == 3):
+    elif(len(sys.argv) == 4):
         try:
             print("Scheduler started successfully")
             print("Press Ctrl + C to abort the automation script")
 
-            schedule.every(int(sys.argv[1])).minutes.do(PlatformSurveillance,sys.argv[2])
+            schedule.every(int(sys.argv[1])).minutes.do(PlatformSurveillance,sys.argv[2],sys.argv[3])
 
             while(True):
                 schedule.run_pending()
